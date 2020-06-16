@@ -40,6 +40,58 @@ unsigned long timePressed;
 unsigned long timeReleased;
 unsigned long timeHold;
 
+void connect_wifi()
+{
+  // Connect to Wifi.
+  Serial.print("Connecting to ");
+  Serial.println(WIFI_SSID);
+
+  // Set WiFi to station mode and disconnect from an AP if it was previously connected
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  delay(100);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  Serial.println("Connecting...");
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    // Check to see if connecting failed. This is due to incorrect credentials
+    if (WiFi.status() == WL_CONNECT_FAILED)
+    {
+      Serial.print("Error 001: Failed to connect to WIFI. Please verify credentials: SSID: ");
+      Serial.print(WIFI_SSID);
+      Serial.print(" Password: ");
+      Serial.println(WIFI_PASS);
+    }
+
+    delay(5000);
+  }
+
+  Serial.println("WiFi connected. IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void reconnect_wifi()
+{
+  // Loop until connected
+  while(!wifiCrumble.connected())
+  {
+
+  }
+}
+
+void on_message(char* topic, byte* message, unsigned int length)
+{
+  Serial.print("Message arrived on topic ");
+  Serial.print(topic);
+  Serial.print(" with content: ");
+  for (size_t j = 0; j < length; j++)
+  {
+    Serial.print((char)message[j]);
+  }
+}
+
 void setup()
 {
   // Start serial
@@ -130,57 +182,5 @@ void loop()
         Serial.println(i);
       }
     }
-  }
-}
-
-void connect_wifi()
-{
-  // Connect to Wifi.
-  Serial.print("Connecting to ");
-  Serial.println(WIFI_SSID);
-
-  // Set WiFi to station mode and disconnect from an AP if it was previously connected
-  WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
-  delay(100);
-
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
-  Serial.println("Connecting...");
-
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    // Check to see if connecting failed. This is due to incorrect credentials
-    if (WiFi.status() == WL_CONNECT_FAILED)
-    {
-      Serial.print("Error 001: Failed to connect to WIFI. Please verify credentials: SSID: ");
-      Serial.print(WIFI_SSID);
-      Serial.print(" Password: ");
-      Serial.println(WIFI_PASS);
-    }
-
-    delay(5000);
-  }
-
-  Serial.println("WiFi connected. IP address: ");
-  Serial.println(WiFi.localIP());
-}
-
-void reconnect_wifi()
-{
-  // Loop until connected
-  while(!wifiCrumble.connected())
-  {
-
-  }
-}
-
-void on_message(char* topic, byte* message, unsigned int length)
-{
-  Serial.print("Message arrived on topic ");
-  Serial.print(topic);
-  Serial.print(" with content: ");
-  for (size_t j = 0; j < length; j++)
-  {
-    Serial.print((char)message[j]);
   }
 }
