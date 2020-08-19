@@ -13,13 +13,19 @@
 #define TOUCHPAD 15
 #define ONEWIRE 2
 
+//
+const char* MQTT_HOST = host_ip;
+const int MQTT_PORT =  1883;
+const char* MQTT_USER = mqtt_user;
+const char* MQTT_PASS = mqtt_pass;
+
 // Define version
-#define VERSION "0.0.1"
+const char* VERSION = "0.0.1";
 
 // WiFi credentials
 WiFiClient wifiCrumble;
-const char* WIFI_SSID = "DLF_guest";
-const char* WIFI_PASS = "wlan4guest";
+const char* WIFI_SSID = "SSID";
+const char* WIFI_PASS = "password";
 
 // OneWire
 OneWire onewire(ONEWIRE);
@@ -31,8 +37,6 @@ float temperature;
 
 // MQTT Broker
 PubSubClient mqttCrumble;
-const char* MQTT_SERVER = "10.0.0.105";
-const int MQTT_PORT = 1883;
 
 // Buttons
 bool buttonPressed = false;
@@ -105,7 +109,7 @@ void setup()
   // Connect to WiFi
   connect_wifi();
 
-  mqttCrumble.setServer(MQTT_SERVER, MQTT_PORT);
+  mqttCrumble.setServer(MQTT_HOST, MQTT_PORT);
   mqttCrumble.setCallback(on_message);
 
   // Start up the DallasTemperature library
